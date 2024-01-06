@@ -6,22 +6,17 @@
 
     const store = useFeedbackStore();
     const { feedbacks } = storeToRefs(store);
-    const { fetchFeedbacks } = store;
+    const { fetchFeedbacks, randomizeFeedbacks } = store;
 
     onMounted(() => {
         fetchFeedbacks();
     });
-
-    if (feedbacks) {
-        console.log(feedbacks)
-    }
-
 </script>
 
 <template>
     <div class="row">
         <div v-for="item in feedbacks" :key="item.id">
-            <div>{{ item.name }} {{ item.description }} {{ item.rating }}</div>
+            <div class="text-white">{{ item.name }} {{ item.description }} {{ item.rating }}</div>
         </div>
     </div>
     <div>

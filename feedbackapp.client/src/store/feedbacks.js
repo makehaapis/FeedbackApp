@@ -5,6 +5,7 @@ import feedbackService from '../services/FeedbackService'
 export const useFeedbackStore = defineStore("feedbacks", {
     state: () => ({
         feedbacks: [],
+        randomFeedbacks: [],
     }),
     getters: {
         getFeedbacks(state) {
@@ -16,7 +17,10 @@ export const useFeedbackStore = defineStore("feedbacks", {
         async fetchFeedbacks() {
             try {
                 const data = await feedbackService.getAll()
-                this.feedbacks = data;
+                this.feedbacks = data
+                    .map(value => ({ value, sort: Math.random() }))
+                    .sort((a, b) => a.sort - b.sort)
+                    .map(({ value }) => value);
             }
             catch (error) {
                 alert(error)
@@ -31,6 +35,12 @@ export const useFeedbackStore = defineStore("feedbacks", {
             } catch (err) {
                 console.error('Post ERROR!', err);
             }
-        }
+        },
+        randomizeFeedbacks() {
+            this.randomFeedback = this.feedbacks
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value)
+        },
     },
 })
