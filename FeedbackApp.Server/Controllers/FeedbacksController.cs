@@ -58,7 +58,8 @@ namespace FeedbackApp.Server.Controllers
             feedback.Name = feedbackDTO.Name;
             feedback.Description = feedbackDTO.Description;
             feedback.Email = feedbackDTO.Email;
-
+            feedback.Created = feedbackDTO.Created;
+            feedback.Rating = feedbackDTO.Rating;
             try
             {
                 await _context.SaveChangesAsync();
@@ -81,6 +82,7 @@ namespace FeedbackApp.Server.Controllers
                 Name = feedbackDTO.Name,
                 Description = feedbackDTO.Description,
                 Email = feedbackDTO.Email,
+                Created = DateTime.Now
         };
 
             _context.Feedbacks.Add(feedback);
@@ -119,6 +121,8 @@ namespace FeedbackApp.Server.Controllers
                 Name = feedback.Name,
                 Description = feedback.Description,
                 Email = feedback.Email,
+                Created = feedback.Created,
+                Rating = feedback.Rating
             };
     }
 }

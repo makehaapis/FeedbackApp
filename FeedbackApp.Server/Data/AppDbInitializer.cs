@@ -21,19 +21,24 @@ namespace FeedbackApp.Server.Data
                             {
                                 Name = "Name for feedback",
                                 Description = "Description for feedback",
-                                Email = "jotain@jotain.fi"
+                                Email = "jotain@jotain.fi",
+                                Created = DateTime.Now,
+                                Rating = 5
                             },
                             new Feedback()
                             {
                                 Name = "Name for feedback 2",
                                 Description = "Description for feedback 2",
-                                Email = "jotain2@jotain.fi"
+                                Email = "jotain2@jotain.fi",
+                                Created = DateTime.Now,
+                                Rating = 5
                             },
                             new Feedback()
                             {
                                 Name = "Name for feedback 3",
                                 Description = "Description for feedback 3",
-                                Email = "jotain3@jotain.fi"
+                                Email = "jotain3@jotain.fi",
+                                Rating = 5
                             },
                         });
                         context.SaveChanges();
