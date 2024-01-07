@@ -1,10 +1,12 @@
 <script setup>
     import NavigationBar from './components/NavigationBar.vue'
+    import NotificationBar from './components/NotificationBar.vue'
 </script>
 
 <template>
     <body>
         <NavigationBar />
+        <NotificationBar />
         <div class="mydiv"></div>
         <div class="container">
             <router-view />
