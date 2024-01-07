@@ -1,35 +1,34 @@
 <script setup>
-    import { useFeedbackStore } from "../store/feedbacks.js";
-    import { storeToRefs } from 'pinia';
-    import { onMounted } from 'vue';
     import FeedbackForm from '../components/FeedbackForm.vue'
-
-    const store = useFeedbackStore();
-    const { feedbacks } = storeToRefs(store);
-    const { fetchFeedbacks, randomizeFeedbacks } = store;
-
-    onMounted(() => {
-        fetchFeedbacks();
-    });
 </script>
 
 <template>
-    <div class="row">
-        <div v-for="item in feedbacks" :key="item.id">
-            <div class="text-white">{{ item.name }} {{ item.description }} {{ item.rating }}</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm text-center">
+                <div class="pt-1 pb-1" style="color:lightgray">
+                    <font-awesome-icon icon="phone" class="my-auto d-inline" /><p class="d-inline text-light my-auto">  010-100100</p>
+                </div>
+            </div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm text-center">
+                <div class="pt-1 pb-1" style="color:lightgray">
+                    <font-awesome-icon icon="home" class="my-auto d-inline" />
+                    <p class="d-inline text-light my-auto"></p>  Address 1, 01000 Helsinki
+                </div>
+            </div>
+            <div class="col-sm"></div>
+        </div>
+        <div class="row">
+            <div class="col-sm"></div>
+            <div class="col-sm">
+                <FeedbackForm />
+            </div>
+            <div class="col-sm"></div>
         </div>
     </div>
-    <div>
-        <FeedbackForm />
-    </div>
 </template>
-
-<style>
-    .mydiv {
-        height: 40px;
-    }
-    .myImg {
-        width: 100%;
-        height: auto;
-    }
-</style>

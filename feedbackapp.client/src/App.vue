@@ -4,14 +4,10 @@
 </script>
 
 <template>
-    <body>
-        <NavigationBar />
-        <NotificationBar />
-        <div class="mydiv"></div>
-        <div class="container">
-            <router-view />
-        </div>
-    </body>
+    <NavigationBar />
+    <div class="mydiv"></div>
+    <NotificationBar />
+    <router-view />
 </template>
 
 <style>
@@ -30,5 +26,9 @@
     }
     .mydiv {
         height: 40px;
+    }
+    .myImg {
+        width: 20%;
+        height: auto;
     }
 </style>

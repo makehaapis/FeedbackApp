@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faInstagram, faTwitter } from "@fortawesome/free-brands-svg-icons";
+import { faInstagram, faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faPhone } from "@fortawesome/free-solid-svg-icons";
+import { faPhone, faHome } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faTwitter, faPhone, faInstagram);
+library.add(faTwitter, faPhone, faFacebook, faInstagram, faHome);
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
