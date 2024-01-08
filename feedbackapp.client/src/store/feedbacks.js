@@ -37,7 +37,6 @@ export const useFeedbackStore = defineStore("feedbacks", {
             }
         },
         async createContents(payload) {
-            console.log(payload)
             try {
                 const data = await feedbackService.create(payload);
                 this.feedbacks.push(data);
