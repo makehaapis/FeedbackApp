@@ -21,7 +21,7 @@
                     name: '',
                     email: '',
                     description: '',
-                    rating: 0,
+                    rating: 1,
                 },
             }
         },
@@ -31,7 +31,7 @@
                     email: { required, email },
                     name: { required, min: minLength(3), max: maxLength(20) },
                     description: { required, min: maxLength(500) },
-                    rating: { required, min: minValue(0), max: maxValue(5) }
+                    rating: { required, min: minValue(1), max: maxValue(5) }
                 },
             }
         },
@@ -65,10 +65,6 @@
         </div>
         <label class="text-white">Give us rating!</label>
     </div>
-        <div class="form-check form-check-inline" :class="{ error: v$.form.rating.$errors.length }">
-            <input class="form-check-input" type="radio" value=0 v-model="v$.form.rating.$model">
-            <label class="form-check-label text-white" for="inlineRadio1">0</label>
-        </div>
         <div class="form-check form-check-inline" :class="{ error: v$.form.rating.$errors.length }">
             <input class="form-check-input" type="radio" value=1 v-model="v$.form.rating.$model">
             <label class="form-check-label text-white" for="inlineRadio1">1</label>
