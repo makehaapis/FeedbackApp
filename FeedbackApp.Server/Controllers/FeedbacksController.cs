@@ -82,7 +82,8 @@ namespace FeedbackApp.Server.Controllers
                 Name = feedbackDTO.Name,
                 Description = feedbackDTO.Description,
                 Email = feedbackDTO.Email,
-                Created = DateTime.Now
+                Created = DateTime.Now,
+                Rating = feedbackDTO.Rating
         };
 
             _context.Feedbacks.Add(feedback);

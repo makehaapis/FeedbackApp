@@ -21,7 +21,7 @@
                     name: '',
                     email: '',
                     description: '',
-                    rating: '',
+                    rating: 0,
                 },
             }
         },

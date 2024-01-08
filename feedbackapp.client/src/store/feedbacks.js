@@ -5,7 +5,7 @@ export const useFeedbackStore = defineStore("feedbacks", {
     state: () => ({
         feedbacks: [],
         randomFeedbacks: [],
-        errorMessage: '',
+        notification: '',
     }),
     getters: {
         getFeedbacks(state) {
@@ -19,19 +19,21 @@ export const useFeedbackStore = defineStore("feedbacks", {
                 this.feedbacks = data
             }
             catch (error) {
-                this.errorMessage = error.message
+                this.notification = error.message
+                setTimeout(() => this.notification = '', 5000);
             }
         },
-        async randomFeedbacks() {
+        async randomizeFeedbacks() {
             try {
                 const data = await feedbackService.getAll()
-                this.feedbacks = data
+                this.randomFeedbacks = data
                     .map(value => ({ value, sort: Math.random() }))
                     .sort((a, b) => a.sort - b.sort)
                     .map(({ value }) => value);
             }
             catch (error) {
-                this.errorMessage = error.message
+                this.notification = error.message
+                setTimeout(() => this.notification = '', 5000);
             }
         },
         async createContents(payload) {
@@ -39,8 +41,11 @@ export const useFeedbackStore = defineStore("feedbacks", {
             try {
                 const data = await feedbackService.create(payload);
                 this.feedbacks.push(data);
+                this.notification = "Thank you for your feedback"
+                setTimeout(() => this.notification = '', 5000);
             } catch (error) {
                 this.errorMessage = error.message
+                setTimeout(() => this.notification = '', 5000);
             }
         },
     },

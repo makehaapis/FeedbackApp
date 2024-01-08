@@ -3,9 +3,9 @@ import "bootstrap"
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { faInstagram, faFacebook, faTwitter } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
-import { faPhone, faHome } from "@fortawesome/free-solid-svg-icons";
+import { faPhone, faHome, faStar } from "@fortawesome/free-solid-svg-icons";
 
-library.add(faTwitter, faPhone, faFacebook, faInstagram, faHome);
+library.add(faTwitter, faPhone, faFacebook, faInstagram, faHome, faStar);
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'

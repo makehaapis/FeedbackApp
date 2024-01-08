@@ -1,6 +1,6 @@
 import axios from 'axios'
 import storageService from './storage'
-const baseUrl = 'https://localhost:7287/api/Feedback'
+const baseUrl = 'https://localhost:7287/api/Feedbacks'
 
 const headers = {
     Authorization: storageService.loadUser() ? `Bearer ${storageService.loadUser().token}` : null
