@@ -27,7 +27,7 @@ namespace FeedbackApp.Server.Controllers
 
         // POST: api/Feedbacks
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
+        [HttpPost]  
         public async Task<ActionResult<FeedbackDTO>> PostFeedback(FeedbackDTO feedbackDTO)
         {
             var feedback = new Feedback
@@ -61,10 +61,6 @@ namespace FeedbackApp.Server.Controllers
             return NoContent();
         }
 
-        private bool FeedbackExists(int id)
-        {
-            return _context.Feedbacks.Any(e => e.Id == id);
-        }
         private static FeedbackDTO FeedbackToDTO(Feedback feedback) =>
             new FeedbackDTO
             {
