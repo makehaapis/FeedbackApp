@@ -4,7 +4,6 @@ import feedbackService from '../services/FeedbackService'
 export const useFeedbackStore = defineStore("feedbacks", {
     state: () => ({
         feedbacks: [],
-        randomFeedbacks: [],
         notification: '',
     }),
     getters: {
@@ -23,25 +22,26 @@ export const useFeedbackStore = defineStore("feedbacks", {
                 setTimeout(() => this.notification = '', 5000);
             }
         },
-        async randomizeFeedbacks() {
-            try {
-                const data = await feedbackService.getAll()
-                this.randomFeedbacks = data
-                    .map(value => ({ value, sort: Math.random() }))
-                    .sort((a, b) => a.sort - b.sort)
-                    .map(({ value }) => value);
-            }
-            catch (error) {
-                this.notification = error.message
-                setTimeout(() => this.notification = '', 5000);
-            }
-        },
         async createContents(payload) {
             try {
                 const data = await feedbackService.create(payload);
                 this.feedbacks.push(data);
                 this.notification = "Thank you for your feedback"
                 setTimeout(() => this.notification = '', 5000);
+            } catch (error) {
+                this.notification = error.message
+                setTimeout(() => this.notification = '', 5000);
+            }
+        },
+        async removeContent(payload) {
+            try {
+                const data = await feedbackService.remove(payload);
+                console.log(data.status)
+                if (data.status == 204) {
+                    this.feedbacks = this.feedbacks.filter((e) => e.id !== payload)
+                    this.notification = "Deleted feedback id: "+ payload
+                    setTimeout(() => this.notification = '', 5000);
+                }
             } catch (error) {
                 this.errorMessage = error.message
                 setTimeout(() => this.notification = '', 5000);

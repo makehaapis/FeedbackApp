@@ -17,7 +17,8 @@ const create = async (object) => {
 }
 
 const remove = async (id) => {
-    await axios.delete(`${baseUrl}/${id}`, { headers })
+    const response = await axios.delete(`${baseUrl}/${id}`, { headers })
+    return response
 }
 
 export default { getAll, create, remove }

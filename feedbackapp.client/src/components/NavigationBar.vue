@@ -1,3 +1,28 @@
+<script>
+    import { useUserStore } from '../store/user'
+    import { storeToRefs } from 'pinia'
+
+    export default {
+        setup() {
+            const store = useUserStore()
+            const { user } = storeToRefs(store)
+            return { user }
+        },
+        methods: {
+            logout() {
+                console.log("clicked")
+                const store = useUserStore()
+                store.logOutUser()
+            }
+        },
+        mounted() {
+            const store = useUserStore()
+            const { loadUser } = store
+            loadUser()
+        }
+    }
+</script>
+
 <template>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container fluid">
@@ -9,12 +34,15 @@
                     <router-link to="/" class="nav-link text-center">HOME</router-link>
                     <router-link to="/about" class="nav-link text-center">ABOUT</router-link>
                     <router-link to="/contact" class="nav-link text-center">CONTACT</router-link>
-                    <a href="https://twitter.com/?lang=en" class="nav-link text-center my-auto"><font-awesome-icon :icon="['fab', 'twitter']" class="my-auto" /></a>
-                    <a href="https://facebook.com/" class="nav-link text-center my-auto"><font-awesome-icon :icon="['fab', 'facebook']" class=" my-auto" /></a>
-                    <a href="https://instagram.com/?lang=en" class="nav-link text-center my-auto"><font-awesome-icon :icon="['fab', 'instagram']" class=" my-auto" /></a>
+                    <router-link to="/admin" v-if="user" class="nav-link text-center">ADMIN PAGE</router-link>
+                    <a href="https://twitter.com/?lang=en" class="nav-link text-center my-auto"><font-awesome-icon :icon="['fab', 'twitter']" /></a>
+                    <a href="https://facebook.com/" class="nav-link text-center my-auto"><font-awesome-icon :icon="['fab', 'facebook']" /></a>
+                    <a href="https://instagram.com/?lang=en" class="nav-link text-center my-auto"><font-awesome-icon :icon="['fab', 'instagram']" /></a>
+                    <router-link to="/admin" class="nav-link text-center my-auto" v-if="user === null"><font-awesome-icon icon="lock"/>LOGIN</router-link>
+                    <button @click="logout" class="nav-link text-center my-auto" v-if="user"><font-awesome-icon icon="lock" />LOGOUT</button>
+                    </div>
                 </div>
             </div>
-        </div>
     </nav>
 </template>
 

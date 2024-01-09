@@ -1,11 +1,19 @@
 const KEY = 'FeedbackappUser'
+let token = null
 
 const saveUser = (user) => {
     localStorage.setItem(KEY, JSON.stringify(user))
+    console.log(loadUser())
 }
 
 const loadUser = () => {
-    return JSON.parse(window.localStorage.getItem(KEY))
+    const loggedUserJSON = window.localStorage.getItem(KEY)
+    if (loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        token = user.token
+        return user
+    }
+    return null
 }
 
 const removeUser = () => {

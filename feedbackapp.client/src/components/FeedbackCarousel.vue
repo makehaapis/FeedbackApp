@@ -3,7 +3,6 @@
     import { Carousel, Navigation, Slide } from 'vue3-carousel'
     import { useFeedbackStore } from '../store/feedbacks'
     import { storeToRefs } from 'pinia'
-    import { onMounted } from 'vue'
     import 'vue3-carousel/dist/carousel.css'
 
     export default defineComponent({
@@ -15,13 +14,13 @@
         },
         setup() {
             const store = useFeedbackStore()
-            const { randomFeedbacks } = storeToRefs(store)
-            return { randomFeedbacks }
+            const { feedbacks } = storeToRefs(store)
+            return { feedbacks }
         },
         mounted() {
             const store = useFeedbackStore()
-            const { randomizeFeedbacks } = store
-            randomizeFeedbacks()
+            const { fetchFeedbacks } = store
+            fetchFeedbacks()
         },
         data: () => ({
             // carousel settings
@@ -53,7 +52,7 @@
     <h2 class="text-light text-center">What our customers say:</h2>
     <div class="card-group pt-2 pb-2">
         <Carousel :autoplay="5000" :wrap-around="true" v-bind="settings" :breakpoints="breakpoints">
-            <Slide v-for="feedback in randomFeedbacks" :key="feedback.id">
+            <Slide v-for="feedback in feedbacks" :key="feedback.id">
                 <div class="card-body text-light h-100">
                     <div class="d-inline h-25" v-for="n in feedback.rating">
                         <div class="pt-1 pb-1 d-inline" style="color:lightgray">

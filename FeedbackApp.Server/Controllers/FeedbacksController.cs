@@ -1,5 +1,7 @@
 ﻿using FeedbackApp.Server.Data;
 using FeedbackApp.Server.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -46,9 +48,11 @@ namespace FeedbackApp.Server.Controllers
         }
 
         // DELETE: api/Feedbacks/5
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFeedback(int id)
         {
+            Console.WriteLine($"Poistetaan:{id}");
             var feedback = await _context.Feedbacks.FindAsync(id);
             if (feedback == null)
             {

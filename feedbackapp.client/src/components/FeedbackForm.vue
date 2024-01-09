@@ -2,8 +2,7 @@
     import useVuelidate from '@vuelidate/core'
     import { required, email, minLength, maxLength, minValue, maxValue } from '@vuelidate/validators'
     import { useFeedbackStore } from '../store/feedbacks';
-    const store = useFeedbackStore();
-    const { createContents } = store;
+
 
     export default {
         setup() {
@@ -11,6 +10,8 @@
         },
         methods: {
             submit: function () {
+                const store = useFeedbackStore();
+                const { createContents } = store;
                 createContents(this.form)
                 this.$refs.feedbackForm.reset();
             }
