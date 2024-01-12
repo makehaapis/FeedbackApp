@@ -5,6 +5,8 @@
     import { storeToRefs } from 'pinia'
     import 'vue3-carousel/dist/carousel.css'
 
+
+
     export default defineComponent({
         name: 'FeedbackCarousel',
         components: {
@@ -14,13 +16,10 @@
         },
         setup() {
             const store = useFeedbackStore()
-            const { feedbacks } = storeToRefs(store)
-            return { feedbacks }
-        },
-        mounted() {
-            const store = useFeedbackStore()
             const { fetchFeedbacks } = store
             fetchFeedbacks()
+            const { feedbacks } = storeToRefs(store)
+            return { feedbacks }
         },
         data: () => ({
             // carousel settings
@@ -49,23 +48,25 @@
 
 <template>
     <div class="mydiv"></div>
-    <h2 class="text-light text-center">What our customers say:</h2>
-    <div class="card-group pt-2 pb-2">
-        <Carousel :autoplay="5000" :wrap-around="true" v-bind="settings" :breakpoints="breakpoints">
-            <Slide v-for="feedback in feedbacks" :key="feedback.id">
-                <div class="card-body text-light h-100">
-                    <div class="d-inline h-25" v-for="n in feedback.rating">
-                        <div class="pt-1 pb-1 d-inline" style="color:lightgray">
-                            <font-awesome-icon icon="star" class="my-auto d-inline" />
+    <div v-if="feedbacks.length > 3">
+        <h2 class="text-light text-center">What our customers say:</h2>
+        <div class="card-group pt-2 pb-2">
+            <Carousel :autoplay="5000" :wrap-around="true" v-bind="settings" :breakpoints="breakpoints">
+                <Slide v-for="feedback in feedbacks" :key="feedback.id">
+                    <div class="card-body text-light h-100">
+                        <div class="d-inline h-25" v-for="n in feedback.rating">
+                            <div class="pt-1 pb-1 d-inline" style="color:lightgray">
+                                <font-awesome-icon icon="star" class="my-auto d-inline" />
+                            </div>
                         </div>
+                        <h5 class="card-text h-auto">{{ feedback.name }}</h5>
+                        <p class="card-text text-center h-auto">"{{ feedback.description}}"</p>
                     </div>
-                    <h5 class="card-text h-auto">{{ feedback.name }}</h5>
-                    <p class="card-text text-center h-auto">"{{ feedback.description}}"</p>
-                </div>
-            </Slide>
-        <template #addons>
-                <Navigation />
-            </template>
-        </Carousel>
+                </Slide>
+                <template #addons>
+                    <Navigation />
+                </template>
+            </Carousel>
+        </div>
     </div>
 </template>

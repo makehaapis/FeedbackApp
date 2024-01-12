@@ -6,6 +6,8 @@
         setup() {
             const store = useUserStore()
             const { user } = storeToRefs(store)
+            const { loadUser } = store
+            loadUser()
             return { user }
         },
         methods: {
@@ -15,11 +17,6 @@
                 store.logOutUser()
             }
         },
-        mounted() {
-            const store = useUserStore()
-            const { loadUser } = store
-            loadUser()
-        }
     }
 </script>
 

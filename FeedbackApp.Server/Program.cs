@@ -9,18 +9,15 @@ using System.Text.Json.Serialization;
 using FeedbackApp.Server.Models;
 using System.Text;
 
-
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration["ConnectionStrings:AppDbContext"];
-Console.WriteLine(connectionString);
-
 // Add services to the container.
+
+//Cors policies for dev purposes, azure web app does'nt require these
+var AllowOrigins = "_allowOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: AllowOrigins,
         policy =>
         {
             policy.WithOrigins("http://localhost:5173",
@@ -30,19 +27,24 @@ builder.Services.AddCors(options =>
         });
 });
 
+//Gets connection string from user secrets
+var connectionString = builder.Configuration["ConnectionStrings:AppDbContext"];
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<TokenService, TokenService>();
 
+builder.Services.AddScoped<IFeedbacksService, FeedbacksService>();
+
+//Adds services and routing logic so controllers/actions can handle requests, json options needed for authresponse and authrequests
 builder.Services.AddControllers().AddJsonOptions(opt =>
 {
     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
 
-// Specify identity requirements
-// Must be added before .AddAuthentication otherwise a 404 is thrown on authorized endpoints
+// Sets identity requirements Must be added before .AddAuthentication otherwise a 404 is thrown on authorized endpoints
 builder.Services
     .AddIdentity<User, IdentityRole>(options =>
     {
@@ -56,10 +58,13 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>();
 
+
+//Get JwtTokenSettings from appsettings.json
 var validIssuer = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidIssuer");
 var validAudience = builder.Configuration.GetValue<string>("JwtTokenSettings:ValidAudience");
 var symmetricSecurityKey = builder.Configuration.GetValue<string>("JwtTokenSettings:SymmetricSecurityKey");
 
+//Add jwt authentication
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -83,24 +88,21 @@ builder.Services.AddAuthentication(options => {
         };
     });
 
-builder.Services.AddControllers();
+//dds services and routing logic so controllers/actions can handle requests
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseDefaultFiles();
-app.UseStaticFiles();
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.UseCors(AllowOrigins);
 }
-
-app.UseCors(MyAllowSpecificOrigins);
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

@@ -25,8 +25,6 @@ namespace FeedbackApp.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<AuthResponse>> Authenticate([FromBody] AuthRequest request)
         {
-            Console.WriteLine(request.Email);
-            Console.WriteLine(request.Password);
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);

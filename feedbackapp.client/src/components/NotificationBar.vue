@@ -14,6 +14,6 @@
 <template>
     <div class="container">
         <h3 class="text-light text-center" v-if="notification">{{ notification }}</h3>
-        <h3 class="text-light text-center" v-if="errorMessage">{{ notification }}</h3>
+        <h3 class="text-light text-center" v-if="errorMessage">{{ errorMessage }}</h3>
     </div>
 </template>

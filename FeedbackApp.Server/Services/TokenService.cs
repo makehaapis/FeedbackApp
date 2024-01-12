@@ -9,12 +9,6 @@ namespace FeedbackApp.Server.Services
     public class TokenService
     {
         private const int ExpirationMinutes = 30;
-        private readonly ILogger<TokenService> _logger;
-
-        public TokenService(ILogger<TokenService> logger)
-        {
-            _logger = logger;
-        }
 
         public string CreateToken(User user)
         {
@@ -25,8 +19,6 @@ namespace FeedbackApp.Server.Services
                 expiration
             );
             var tokenHandler = new JwtSecurityTokenHandler();
-
-            _logger.LogInformation("JWT Token created");
 
             return tokenHandler.WriteToken(token);
         }
@@ -48,14 +40,14 @@ namespace FeedbackApp.Server.Services
             try
             {
                 var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, jwtSub),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
-                new Claim(ClaimTypes.NameIdentifier, user.Id),
-                new Claim(ClaimTypes.Email, user.EmailAddress),
-                new Claim(ClaimTypes.Role, user.Role.ToString())
-            };
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, jwtSub),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString()),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Email, user.EmailAddress),
+                    new Claim(ClaimTypes.Role, user.Role.ToString())
+                };
                 return claims;
             }
             catch (Exception e)

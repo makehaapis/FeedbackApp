@@ -1,7 +1,7 @@
 ﻿using FeedbackApp.Server.Data;
 using FeedbackApp.Server.Models;
+using FeedbackApp.Server.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,39 +12,28 @@ namespace FeedbackApp.Server.Controllers
     public class FeedbacksController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IFeedbacksService _service;
 
-        public FeedbacksController(AppDbContext context)
+        public FeedbacksController(AppDbContext context, IFeedbacksService service)
         {
             _context = context;
+            _service = service;
         }
 
-        // GET: api/Feedbacks
+        //GET: api/feedbacks
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FeedbackDTO>>> GetFeedbacks()
+        public async Task<IActionResult> GetFeedbacks()
         {
-            return await _context.Feedbacks
-                .Select(f => FeedbackToDTO(f))
-                .ToListAsync();
+            var allFeedbacks = await _service.GetAllAsync();
+            return Ok(allFeedbacks);
         }
 
         // POST: api/Feedbacks
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]  
-        public async Task<ActionResult<FeedbackDTO>> PostFeedback(FeedbackDTO feedbackDTO)
+        public async Task<ActionResult> PostFeedback(Feedback feedback)
         {
-            var feedback = new Feedback
-            {
-                Name = feedbackDTO.Name,
-                Description = feedbackDTO.Description,
-                Email = feedbackDTO.Email,
-                Created = DateTime.Now,
-                Rating = feedbackDTO.Rating
-        };
-
-            _context.Feedbacks.Add(feedback);
-            await _context.SaveChangesAsync();
-
-            return FeedbackToDTO(feedback);
+            await _service.AddAsync(feedback);
+            return Ok(feedback);
         }
 
         // DELETE: api/Feedbacks/5
@@ -52,28 +41,13 @@ namespace FeedbackApp.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteFeedback(int id)
         {
-            Console.WriteLine($"Poistetaan:{id}");
-            var feedback = await _context.Feedbacks.FindAsync(id);
+            var feedback = await _service.GetByIdAsync(id);
             if (feedback == null)
             {
                 return NotFound();
             }
-
-            _context.Feedbacks.Remove(feedback);
-            await _context.SaveChangesAsync();
-
+            await _service.DeleteAsync(id);
             return NoContent();
         }
-
-        private static FeedbackDTO FeedbackToDTO(Feedback feedback) =>
-            new FeedbackDTO
-            {
-                Id = feedback.Id,
-                Name = feedback.Name,
-                Description = feedback.Description,
-                Email = feedback.Email,
-                Created = feedback.Created,
-                Rating = feedback.Rating
-            };
     }
 }

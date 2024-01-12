@@ -19,8 +19,9 @@ export const useUserStore = defineStore("user", {
                 this.user = userFromDb
                 storageService.saveUser(userFromDb)
             } catch (error) {
-                this.errorMessage = error.message
-                setTimeout(() => this.notification = '', 5000);
+                console.log(error)
+                this.errorMessage = error.response.data
+                setTimeout(() => this.errorMessage = '', 5000);
             }
         },
         loadUser() {
@@ -32,8 +33,8 @@ export const useUserStore = defineStore("user", {
         logOutUser() {
             storageService.removeUser()
             this.user = null
-            this.notification = "Logged out"
-            setTimeout(() => this.notification = '', 5000);
+            this.errorMessage = "Logged out"
+            setTimeout(() => this.errorMessage = '', 5000);
         }
     },
 })

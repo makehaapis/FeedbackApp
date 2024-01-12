@@ -5,20 +5,18 @@
     export default {
         setup() {
             const store = useFeedbackStore()
+            const { fetchFeedbacks } = store
+            fetchFeedbacks()
             const { feedbacks } = storeToRefs(store)
             return { feedbacks }
         },
-        mounted() {
-            const store = useFeedbackStore()
-            const { fetchFeedbacks } = store
-            fetchFeedbacks()
-        },
         methods: {
             submit: function (id) {
-                console.log(id)
                 const store = useFeedbackStore();
                 const { removeContent } = store;
                 removeContent(id)
+                const { feedbacks } = storeToRefs(store)
+                return { feedbacks }
             }
         },
     }

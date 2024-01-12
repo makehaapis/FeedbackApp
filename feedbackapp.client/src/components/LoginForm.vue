@@ -56,27 +56,34 @@
         <div class="row">
             <div class="col-sm"></div>
             <div class="col-sm">
-                    <form @submit.prevent="submit" ref="loginForm">
-                        <div class="form-group" :class="{ error: v$.form.email.$errors.length }">
-                            <label class="text-white">Email: </label>
-                            <input class="form-control" placeholder="Enter your email" type="text" v-model="v$.form.email.$model"></input>
-                            <div class="pre-icon os-icon os-icon-user-male-circle"></div>
+                <form @submit.prevent="submit" ref="loginForm">
+                    <div class="form-group">
+                        <div :class="{ error: v$.form.email.$errors.length }">
+                            <div class="text-white d-inline">
+                                <font-awesome-icon icon="circle-user" />
+                                <label class="text-white d-inline my-auto">Email: </label>
+                            </div>
+                            <input class="form-control" placeholder="Enter your email" type="text" v-model="v$.form.email.$model">
                             <div class="input-errors" v-for="(error, index) of v$.form.email.$errors" :key="index">
                                 <div class="error-msg text-danger">{{ error.$message }}</div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="text-white">Password: </label>
-                            <input class="form-control" placeholder="Enter password" type="password" v-model="v$.form.password.$model">
-                            <div class="pre-icon os-icon os-icon-user-male-circle"></div>
-                            <div class="input-errors" v-for="(error, index) of v$.form.password.$errors" :key="index">
-                                <div class="error-msg text-danger">{{ error.$message }}</div>
-                            </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="text-white d-inline">
+                            <font-awesome-icon icon="lock" />
+                            <label class="text-white d-inline my-auto">Password: </label>
                         </div>
-                        <div class="buttons-w">
-                            <button :disabled="v$.form.$invalid" class="btn btn-primary">Login</button>
+                        <input class="form-control" placeholder="Enter password" type="password" v-model="v$.form.password.$model">
+                        <div class="pre-icon os-icon os-icon-user-male-circle"></div>
+                        <div class="input-errors" v-for="(error, index) of v$.form.password.$errors" :key="index">
+                            <div class="error-msg text-danger">{{ error.$message }}</div>
                         </div>
-                    </form>
+                    </div>
+                    <div class="buttons-w">
+                        <button :disabled="v$.form.$invalid" class="btn btn-primary">Login</button>
+                    </div>
+                </form>
             </div>
             <div class="col-sm"></div>
         </div>

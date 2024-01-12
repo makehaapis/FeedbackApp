@@ -7,6 +7,7 @@ namespace FeedbackApp.Server.Data
 {
     public class AppDbInitializer
     {
+        //Initialize database with feedbacks
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
             using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
