@@ -1,86 +1,109 @@
+using Baseline.Reflection;
 using FeedbackApp.Server.Controllers;
 using FeedbackApp.Server.Data;
 using FeedbackApp.Server.Models;
 using FeedbackApp.Server.Services;
+using ImTools;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Moq;
-using Moq.Protected;
-using System.Collections.Generic;
-using Xunit;
-using Xunit.Abstractions;
-
+using System.Linq.Expressions;
 namespace BackendTests
 {
-    public class FeedbacksServiceTests
+    public class FeedbackServiceTests : IDisposable
     {
-        private FeedbacksService feedbackService;
-        private readonly AppDbContext _context;
-        private readonly ITestOutputHelper output;
+        private readonly AppDbContext _testcontext;
+        private readonly FeedbacksService _service;
+        private readonly FeedbacksController _controller;
 
-        public FeedbacksServiceTests(ITestOutputHelper output)
+        public FeedbackServiceTests()
         {
-                feedbackService = new FeedbacksService(_context);
-                this.output = output;
+            var options = new DbContextOptionsBuilder<AppDbContext>()
+                .UseSqlServer("Data Source=DESKTOP-87R64IG\\SQLEXPRESS;Initial Catalog=FeedBackAppTestsDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+                .Options;
+
+            _testcontext = new AppDbContext(options);
+            _testcontext.Database.EnsureDeleted();
+            _testcontext.Database.Migrate();
+
+            _service = new FeedbacksService(_testcontext);
+            _controller = new FeedbacksController(_testcontext, _service);
+        }
+
+        public void Dispose()
+        {
+            _testcontext.Database.EnsureDeleted();
+            _testcontext.Dispose();
         }
 
         [Fact]
-        public void GetFeedbacks()
+        public async Task GetAllAsync_ShouldReturnAll()
         {
-            //Arrange
-
-            //Act
-            var feedbacks = feedbackService.GetAllAsync();
-
-            //Assert
-            Assert.Multiple(() =>
+            _testcontext.Feedbacks.AddRange(Enumerable.Range(1, 5).Select(x => new Feedback
             {
-                Assert.NotNull(feedbacks);
-            });
+                Name = $"Name {x}",
+                Description = $"Description {x}",
+                Email = $"Email {x}",
+                Rating = x
+            }));
+
+            await _testcontext.SaveChangesAsync();
+
+            var feedbacks = await _service.GetAllAsync();
+
+            Assert.Equal(5, feedbacks.Count());
         }
 
         [Fact]
-        public void GetFeedbackId()
+        public async void WhenFeedbackAdded_CountShouldBeOne()
         {
-            //Arrange
-            int id = 1;
-
-            //Act
-            var feedback = feedbackService.GetByIdAsync(id);
-
-            //Assert
-            Assert.Multiple(() =>
+            await _service.AddAsync(new Feedback
             {
-                Assert.NotNull(feedback);
-                Assert.Equal(1, feedback.Id);
-            });
-        }
-
-        [Fact]
-        public void AddFeedback()
-        {
-            //Arrange
-            Feedback feedback = new Feedback()
-            {
-                Id = 100,
-                Name = "New User",
-                Email = "test@email.com",
+                Name = "Name",
                 Description = "Description",
-                Rating = 4
-            };
-
-            //Act
-            var data = feedbackService.AddAsync(feedback);
-            var expectedData = feedbackService.GetByIdAsync(feedback.Id);
-
-            //Assert
-            Assert.Multiple(() =>
-            {
-                Assert.NotNull(data);
-                Assert.NotNull(expectedData);
-                Assert.Equal(expectedData.Id, expectedData.Id);
+                Email = "email@email.co",
+                Rating = 1
             });
+
+            await _testcontext.SaveChangesAsync();
+
+            var feedbacks = await _service.GetAllAsync();
+
+            Assert.Equal(1, feedbacks.Count());
+        }
+
+        [Fact]
+        public async void WhenFeedbackWithoutDesciprtionAdded_ShouldThrowDbException()
+        {
+            await Assert.ThrowsAsync<DbUpdateException>(async () => await _service.AddAsync(new Feedback
+            {
+                Name = "Name",
+                Email = "email@email.co",
+                Rating = 1
+            }));
+            
+        }
+
+        [Fact]
+        public async void WhenFeedbackWithoutEmailAdded_ShouldThrowDbException()
+        {
+            await Assert.ThrowsAsync<DbUpdateException>(async () => await _service.AddAsync(new Feedback
+            {
+                Name = "Name",
+                Description = "Description",
+                Rating = 1
+            }));
+        }
+
+        [Fact]
+        public async void WhenFeedbackWithoutNameAdded_ShouldThrowDbException()
+        {
+            await Assert.ThrowsAsync<DbUpdateException>(async () => await _service.AddAsync(new Feedback
+            {
+                Email = "email@email.com",
+                Description = "Description",
+                Rating = 1
+            }));
         }
     }
 }

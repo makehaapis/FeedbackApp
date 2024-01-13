@@ -8,6 +8,7 @@ namespace FeedbackApp.Server.Models
     public class User: IdentityUser
     {
         [Required(ErrorMessage = "Email addres is required")]
+        [EmailAddress]
         public string EmailAddress { get; set; }
 
         [Required]

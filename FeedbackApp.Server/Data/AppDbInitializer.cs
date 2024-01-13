@@ -14,11 +14,11 @@ namespace FeedbackApp.Server.Data
             {
                 var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
 
-                if (context.Database.EnsureCreated())
-                {
-                    if (!context.Feedbacks.Any())
+                    if (context.Database.EnsureCreated())
                     {
-                        context.Feedbacks.AddRange(new List<Feedback>()
+                        if (!context.Feedbacks.Any())
+                        {
+                            context.Feedbacks.AddRange(new List<Feedback>()
                         {
                             new()
                             {
@@ -64,11 +64,11 @@ namespace FeedbackApp.Server.Data
                                 Email = "bob@gmail.com",
                                 Rating = 3
                             }
-                        });
-                        context.SaveChanges();
+                            });
+                            context.SaveChanges();
+                        }
                     }
                 }
             }
         }
     }
-}

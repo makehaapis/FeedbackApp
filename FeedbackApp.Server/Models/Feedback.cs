@@ -20,6 +20,5 @@ namespace FeedbackApp.Server.Models
         [Required]
         [Range(1, 5, ErrorMessage = "Rating must be between 0 and 5")]
         public int Rating { get; set; }
-        public string Secret { get; set; }
     }
 }

@@ -2,11 +2,11 @@
     import useVuelidate from '@vuelidate/core'
     import { required, email } from '@vuelidate/validators'
     import { useUserStore } from '../store/user'
-    import loginService from '../services/login'
-    import storageService from '../services/storage'
     import { storeToRefs } from 'pinia'
+
     const store = useUserStore()
-    const { setUser } = store
+    const { setUser, loadUser } = store
+
 
     export default {
         setup() {
@@ -15,16 +15,14 @@
             return { v$: useVuelidate(), user }
         },
         methods: {
-            submit: async function () {
-                try {
+            submit: function () {
                     const email = this.form.email
                     const password = this.form.password
                     setUser(email, password)
                     this.$refs.loginForm.reset();
-                } catch (error) {
-                    console.log(error)
-                    this.$refs.loginForm.reset();
-                }
+                    loadUser()
+                    const store = useUserStore()
+                    const { user } = storeToRefs(store)
             },
         },
         data() {
@@ -43,11 +41,6 @@
                 },
             }
         },
-        mounted() {
-            const store = useUserStore()
-            const { loadUser } = store
-            loadUser()
-        }
     }
 </script>
 

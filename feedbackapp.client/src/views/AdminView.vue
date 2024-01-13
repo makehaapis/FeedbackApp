@@ -9,12 +9,9 @@
         setup() {
             const userStore = useUserStore()
             const { user } = storeToRefs(userStore)
-            return { user }
-        },
-        mounted() {
-            const store = useUserStore()
-            const { loadUser } = store
+            const { loadUser } = userStore
             loadUser()
+            return { user }
         },
         components: {
             LoginForm,

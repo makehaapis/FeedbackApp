@@ -15,7 +15,7 @@ namespace FeedbackApp.Server.Controllers
         private readonly AppDbContext _context;
         private readonly TokenService _tokenService;
 
-        public LoginController(UserManager<User> userManager, AppDbContext context, TokenService tokenService, ILogger<LoginController> logger)
+        public LoginController(UserManager<User> userManager, AppDbContext context, TokenService tokenService)
         {
             _userManager = userManager;
             _context = context;
