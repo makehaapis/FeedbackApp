@@ -19,7 +19,7 @@ namespace BackendTests
         public FeedbackServiceTests()
         {
             var options = new DbContextOptionsBuilder<AppDbContext>()
-                .UseSqlServer("Data Source=DESKTOP-87R64IG\\SQLEXPRESS;Initial Catalog=FeedBackAppTestsDB;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False")
+                .UseSqlServer("")
                 .Options;
 
             _testcontext = new AppDbContext(options);

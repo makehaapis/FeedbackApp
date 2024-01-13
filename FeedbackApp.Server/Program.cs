@@ -28,10 +28,12 @@ builder.Services.AddCors(options =>
 });
 
 //Gets connection string from user secrets
-var connectionString = builder.Configuration["ConnectionStrings:AppDbContext"];
+//var connectionString = builder.Configuration["ConnectionStrings:AppDbContext"];
+//builder.Services.AddDbContext<AppDbContext>(options =>
+//    options.UseSqlServer(connectionString));
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString") ?? throw new InvalidOperationException("Connection string 'DefaultConnectionString' not found.")));
 
 builder.Services.AddScoped<TokenService, TokenService>();
 
